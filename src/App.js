@@ -3,8 +3,9 @@ import Header from './components/Header.jsx';
 import Categories from './components/Categories.jsx';
 import Sort from './components/Sort.jsx';
 import PizzaBlock from './components/PizzaBlock.jsx';
+import pizzas from './assets/pizzas.json'
 
-
+console.log(pizzas);
 
 function App() {
   return (
@@ -16,17 +17,13 @@ function App() {
           <Categories/>
           <Sort/>
           </div>
-          <h2 className="content__title">Все пиццы</h2>
+          <h2 className="content__title">Всі піци</h2>
           <div className="content__items">
-           <PizzaBlock title="Мексиканская"/>
-           <PizzaBlock/>
-           <PizzaBlock/>
-           <PizzaBlock/>
-           <PizzaBlock/>
-           <PizzaBlock/>
-           <PizzaBlock/>
-           <PizzaBlock/>
-           <PizzaBlock/>
+           {
+             pizzas.map(obj => 
+              <PizzaBlock key={obj.id} {...obj}/>
+            )
+           }
           </div>
         </div>
       </div>

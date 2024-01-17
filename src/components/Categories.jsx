@@ -5,14 +5,14 @@ const Categories = () => {
 
   const categories = ["Всі", "М'ясна", "Вегетаріанська", "Гриль", "Гостра", "Закрита"]
 
-  function setCategories (index) {
+  const setCategories = (index) => {
     SetActiveIndex(index)
   }
     return (
         <div className="categories">
         <ul>
           {categories.map((value, i) => (
-            <li onClick={()=>setCategories(i)} className={activeIndex === i ? "active" : ""}>{value}</li>
+            <li key={i} onClick={()=>setCategories(i)} className={activeIndex === i ? "active" : ""}>{value}</li>
           ))}
           
         </ul>
