@@ -1,8 +1,9 @@
 import React from 'react'
 import LogoSvg from '../assets/img/pizza-logo.svg'
 import { NavLink } from 'react-router-dom'
+import Search from './Search'
 
-const Header = () => {
+const Header = ({searchValue, setSearchValue}) => {
   return (
     <div className="header">
       <div className="container">
@@ -10,11 +11,12 @@ const Header = () => {
           <div className="header__logo">
             <img width="38" src={LogoSvg} alt="Pizza logo" />
             <div>
-              <h1>React Pizza</h1>
+              <h1>React Pizza V2</h1>
               <p>найсмачніша піца всесвіту</p>
             </div>
           </div>
         </NavLink>
+        <Search searchValue= {searchValue} setSearchValue={setSearchValue}/>
         <div className="header__cart">
           <NavLink to="/cart" className="button button--cart">
             <span>520 ₴</span>
