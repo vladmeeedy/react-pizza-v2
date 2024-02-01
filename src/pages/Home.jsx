@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import Categories from '../components/Categories'
 import Sort from '../components/Sort'
 import PizzaBlock from '../components/PizzaBlock'
@@ -6,20 +7,23 @@ import Skeleton from '../components/PizzaBlock/Skeleton.jsx'
 import Pagination from '../Pagination/index.jsx'
 import { SearchContext } from '../App.js'
 import { useSelector, useDispatch } from 'react-redux'
-import { setCategoryId } from '../redux/slices/filterSlice.js'
+import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice.js'
 
 const Home = () => {
-  const {categoryId, sort} = useSelector((state) => state.filter);
+  const { categoryId, sort, currentPage } = useSelector((state) => state.filter)
   const dispatch = useDispatch()
 
-  const onChangeCategory =(id)=>{
-dispatch(setCategoryId(id))
-}
-  
+  const onChangeCategory = (id) => {
+    dispatch(setCategoryId(id))
+  }
+
+  const onChangePage = number =>{
+dispatch(setCurrentPage(number))
+  }
+
   const { searchValue } = React.useContext(SearchContext)
   const [items, setItems] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(true)
-  const [currentPage, setCurrentPage] = React.useState(1)
   const [notFound, setNotFound] = React.useState('Всі піци')
 
   React.useEffect(() => {
@@ -29,20 +33,14 @@ dispatch(setCategoryId(id))
     const category = categoryId > 0 ? `category=${categoryId}` : ''
     const search = searchValue ? `&search=${searchValue}` : ''
 
-    fetch(
-      `https://65a92c59219bfa371868aad2.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
-    )
-      .then((res) => res.json())
-      .then((arr) => {
-        if (arr === 'Not found') {
-          setItems([])
-          setIsLoading(false)
-          setNotFound('Нічого не знайдено')
-        } else {
-          setItems(arr)
-          setIsLoading(false)
-          setNotFound('Всі піци')
-        }
+    axios
+      .get(
+        `https://65a92c59219bfa371868aad2.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
+      )
+      .then((res) => {
+        setItems(res.data)
+        setIsLoading(false)
+        setNotFound('Всі піци')
       })
 
     window.scrollTo(0, 0)
@@ -64,15 +62,12 @@ dispatch(setCategoryId(id))
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          value={categoryId}
-          onChangeCategory={onChangeCategory}
-        />
-        <Sort  />
+        <Categories value={categoryId} onChangeCategory={onChangeCategory} />
+        <Sort />
       </div>
       <h2 className="content__title">{notFound}</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
-      <Pagination onChangePage={(number) => setCurrentPage(number)} />
+      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   )
 }
