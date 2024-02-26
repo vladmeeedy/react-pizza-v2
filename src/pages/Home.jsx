@@ -5,26 +5,24 @@ import Sort, { sortList } from '../components/Sort'
 import PizzaBlock from '../components/PizzaBlock'
 import Skeleton from '../components/PizzaBlock/Skeleton.jsx'
 import Pagination from '../Pagination/index.jsx'
-import { SearchContext } from '../App.js'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   setCategoryId,
   setCurrentPage,
   setFilters,
 } from '../redux/slices/filterSlice.js'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { fetchPizzas } from '../redux/slices/pizzaSlice.js'
 
 const Home = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const isMounted = React.useRef(false)
-  const { categoryId, sort, currentPage } = useSelector((state) => state.filter)
-  const {items, status} = useSelector((state) => state.pizza)
+  const { categoryId, sort, currentPage, searchValue } = useSelector(
+    (state) => state.filter,
+  )
+  const { items, status } = useSelector((state) => state.pizza)
   const [title, setTitle] = React.useState('Всі піци')
-
-  const { searchValue } = React.useContext(SearchContext)
-  
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id))
@@ -40,16 +38,16 @@ const Home = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : ''
     const search = searchValue ? `&search=${searchValue}` : ''
 
-dispatch(fetchPizzas({
-  order,
-  sortBy,
-  category,
-  search,
-  currentPage
-}))
+    dispatch(
+      fetchPizzas({
+        order,
+        sortBy,
+        category,
+        search,
+        currentPage,
+      }),
+    )
   }
-
-  
 
   React.useEffect(() => {
     if (isMounted.current) {
@@ -80,21 +78,16 @@ dispatch(fetchPizzas({
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
-     getPizzas()
-
-
+    getPizzas()
   }, [categoryId, sort.sortProperty, searchValue, currentPage])
 
   React.useEffect(() => {
     if (status === 'error') {
-      setTitle('Виникла помилка');
+      setTitle('Виникла помилка')
     } else {
-      setTitle('Всі піци');
+      setTitle('Всі піци')
     }
-  }, [status]);
-  
-
-  
+  }, [status])
 
   const pizzas = items
     .filter((obj) => {
@@ -103,13 +96,17 @@ dispatch(fetchPizzas({
       }
       return false
     })
-    .map((obj) => <PizzaBlock key={obj.id} {...obj} />)
+    .map((obj) => (
+      <Link key={obj.id} to={`/pizza/${obj.id}`}>
+        <PizzaBlock {...obj} />
+      </Link>
+    ))
 
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ))
 
-  console.log(items);
+  console.log(items)
 
   return (
     <div className="container">
@@ -117,8 +114,10 @@ dispatch(fetchPizzas({
         <Categories value={categoryId} onChangeCategory={onChangeCategory} />
         <Sort />
       </div>
-      <h2 className="content__title">{title}</h2>     
-      <div className="content__items">{status === 'loading' ?  skeletons : pizzas }</div>
+      <h2 className="content__title">{title}</h2>
+      <div className="content__items">
+        {status === 'loading' ? skeletons : pizzas}
+      </div>
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   )
