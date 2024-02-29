@@ -13,18 +13,18 @@ export const sortList = [
 
 export const Sort = () => {
   const dispatch = useDispatch()
-  const sort = useSelector(selectSort)
-  const sortRef = React.useRef()
+  const {sort} = useSelector(selectSort)
+  const sortRef = React.useRef<HTMLDivElement>(null)
 
   const [open, setOpen] = React.useState(false)
 
-  const onClickListItem = (obj) => {
+  const onClickListItem = (obj: any) => {
     dispatch(setSort(obj))
     setOpen(false)
   }
 
   React.useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: any) => {
       if (sortRef.current && !sortRef.current.contains(event.target)) {
         setOpen(false)
       }

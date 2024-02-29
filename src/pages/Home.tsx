@@ -3,33 +3,34 @@ import qs from 'qs'
 import Categories from '../components/Categories'
 import Sort, { sortList } from '../components/Sort'
 import PizzaBlock from '../components/PizzaBlock'
-import Skeleton from '../components/PizzaBlock/Skeleton.jsx'
-import Pagination from '../Pagination/index.jsx'
+import Skeleton from '../components/PizzaBlock/Skeleton'
+import Pagination from '../Pagination'
 import { useSelector, useDispatch } from 'react-redux'
 import {
+  selectSort,
   setCategoryId,
   setCurrentPage,
   setFilters,
 } from '../redux/slices/filterSlice.js'
 import { Link, useNavigate } from 'react-router-dom'
-import { fetchPizzas } from '../redux/slices/pizzaSlice.js'
+import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice.js'
 
-const Home = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const isMounted = React.useRef(false)
   const { categoryId, sort, currentPage, searchValue } = useSelector(
-    (state) => state.filter,
+   selectSort
   )
-  const { items, status } = useSelector((state) => state.pizza)
+  const { items, status } = useSelector(selectPizzaData)
   const [title, setTitle] = React.useState('Всі піци')
 
-  const onChangeCategory = (id) => {
-    dispatch(setCategoryId(id))
+  const onChangeCategory = (idx: number) => {
+    dispatch(setCategoryId(idx))
   }
 
-  const onChangePage = (number) => {
-    dispatch(setCurrentPage(number))
+  const onChangePage = (value: number) => {
+    dispatch(setCurrentPage(value))
   }
 
   const getPizzas = () => {
@@ -39,6 +40,7 @@ const Home = () => {
     const search = searchValue ? `&search=${searchValue}` : ''
 
     dispatch(
+      // @ts-ignore
       fetchPizzas({
         order,
         sortBy,
@@ -79,7 +81,7 @@ const Home = () => {
   React.useEffect(() => {
     window.scrollTo(0, 0)
     getPizzas()
-  }, [categoryId, sort.sortProperty, searchValue, currentPage])
+  }, [categoryId, sort.sortProperty, currentPage])
 
   React.useEffect(() => {
     if (status === 'error') {
@@ -90,13 +92,13 @@ const Home = () => {
   }, [status])
 
   const pizzas = items
-    .filter((obj) => {
+    .filter((obj: any) => {
       if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
         return true
       }
       return false
     })
-    .map((obj) => (
+    .map((obj: any) => (
       <Link key={obj.id} to={`/pizza/${obj.id}`}>
         <PizzaBlock {...obj} />
       </Link>
