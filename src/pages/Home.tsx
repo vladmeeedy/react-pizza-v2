@@ -7,20 +7,20 @@ import Skeleton from '../components/PizzaBlock/Skeleton'
 import Pagination from '../Pagination'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  selectSort,
+  selectFilter,
   setCategoryId,
   setCurrentPage,
   setFilters,
-} from '../redux/slices/filterSlice.js'
+} from '../redux/slices/filterSlice'
 import { Link, useNavigate } from 'react-router-dom'
-import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice.js'
+import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice'
 
 const Home: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const isMounted = React.useRef(false)
   const { categoryId, sort, currentPage, searchValue } = useSelector(
-   selectSort
+  selectFilter
   )
   const { items, status } = useSelector(selectPizzaData)
   const [title, setTitle] = React.useState('Всі піци')

@@ -13,7 +13,7 @@ export const sortList = [
 
 export const Sort = () => {
   const dispatch = useDispatch()
-  const {sort} = useSelector(selectSort)
+  const sort = useSelector(selectSort)
   const sortRef = React.useRef<HTMLDivElement>(null)
 
   const [open, setOpen] = React.useState(false)
@@ -24,8 +24,8 @@ export const Sort = () => {
   }
 
   React.useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (sortRef.current && !sortRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
         setOpen(false)
       }
     }
