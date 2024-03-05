@@ -5,7 +5,7 @@ import Sort, { sortList } from '../components/Sort'
 import PizzaBlock from '../components/PizzaBlock'
 import Skeleton from '../components/PizzaBlock/Skeleton'
 import Pagination from '../Pagination'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import {
   selectFilter,
   setCategoryId,
@@ -13,15 +13,19 @@ import {
   setFilters,
 } from '../redux/slices/filterSlice'
 import { Link, useNavigate } from 'react-router-dom'
-import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice'
+import {
+  SearchPizzaParams,
+  fetchPizzas,
+  selectPizzaData,
+} from '../redux/slices/pizzaSlice'
+import { useAppDispatch } from '../redux/store'
 
 const Home: React.FC = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const isMounted = React.useRef(false)
-  const { categoryId, sort, currentPage, searchValue } = useSelector(
-  selectFilter
-  )
+  const { categoryId, sort, currentPage, searchValue } =
+    useSelector(selectFilter)
   const { items, status } = useSelector(selectPizzaData)
   const [title, setTitle] = React.useState('Всі піци')
 
@@ -40,56 +44,64 @@ const Home: React.FC = () => {
     const search = searchValue ? `&search=${searchValue}` : ''
 
     dispatch(
-      // @ts-ignore
       fetchPizzas({
         order,
         sortBy,
         category,
         search,
-        currentPage,
+        currentPage: String(currentPage),
       }),
     )
+    window.scrollTo(0, 0)
   }
 
-  React.useEffect(() => {
-    if (isMounted.current) {
-      const queryString = qs.stringify({
-        sortProperty: sort.sortProperty,
-        categoryId,
-        currentPage,
-      })
-      navigate(`?${queryString}`)
-    }
-    isMounted.current = true
-  }, [categoryId, sort.sortProperty, currentPage])
+  // React.useEffect(() => {
+  //   if (isMounted.current) {
+  //     const params = {
+  //       categoryId: categoryId > 0 ? categoryId : null,
+  //       sortProperty: sort.sortProperty,
+  //       currentPage,
+  //     }
+  //     const queryString = qs.stringify(params, { skipNulls: true })
+  //     navigate(`/?${queryString}`)
+  //   }
 
-  React.useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1))
-      const sort = sortList.find(
-        (obj) => obj.sortProperty === params.sortProperty,
-      )
-      dispatch(
-        setFilters({
-          ...params,
-          sort,
-        }),
-      )
-    }
-  }, [])
+  //   if (window.location.search) {
+  //     dispatch(fetchPizzas({} as SearchPizzaParams))
+  //   }
+  // }, [categoryId, sort.sortProperty, searchValue, currentPage])
+
+  // React.useEffect(() => {
+  //   if (window.location.search) {
+  //     const params = qs.parse(
+  //       window.location.search.substring(1),
+  //     ) as unknown as SearchPizzaParams
+  //     const sort = sortList.find((obj) => obj.sortProperty === params.sortBy)
+
+  //     dispatch(
+  //       setFilters({
+  //         searchValue: params.search,
+  //         categoryId: Number(params.category),
+  //         currentPage: Number(params.currentPage),
+  //         sort: sort || sortList[0],
+  //       }),
+  //     )
+  //   }
+  //   isMounted.current = true
+  // }, [])
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
     getPizzas()
   }, [categoryId, sort.sortProperty, currentPage])
 
-  React.useEffect(() => {
-    if (status === 'error') {
-      setTitle('Виникла помилка')
-    } else {
-      setTitle('Всі піци')
-    }
-  }, [status])
+  // React.useEffect(() => {
+  //   if (status === 'error') {
+  //     setTitle('Виникла помилка')
+  //   } else {
+  //     setTitle('Всі піци')
+  //   }
+  // }, [status])
 
   const pizzas = items
     .filter((obj: any) => {
@@ -99,9 +111,9 @@ const Home: React.FC = () => {
       return false
     })
     .map((obj: any) => (
-      <Link key={obj.id} to={`/pizza/${obj.id}`}>
+      
         <PizzaBlock {...obj} />
-      </Link>
+    
     ))
 
   const skeletons = [...new Array(6)].map((_, index) => (
