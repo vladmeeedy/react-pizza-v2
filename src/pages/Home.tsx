@@ -29,9 +29,9 @@ const Home: React.FC = () => {
   const { items, status } = useSelector(selectPizzaData)
   const [title, setTitle] = React.useState('Всі піци')
 
-  const onChangeCategory = (idx: number) => {
+  const onChangeCategory = React.useCallback((idx: number) => {
     dispatch(setCategoryId(idx))
-  }
+  }, [])
 
   const onChangePage = (value: number) => {
     dispatch(setCurrentPage(value))
@@ -110,23 +110,17 @@ const Home: React.FC = () => {
       }
       return false
     })
-    .map((obj: any) => (
-      
-        <PizzaBlock {...obj} />
-    
-    ))
+    .map((obj: any) => <PizzaBlock key={obj.id} {...obj} />)
 
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ))
 
-  console.log(items)
-
   return (
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-        <Sort />
+        <Sort value={sort} />
       </div>
       <h2 className="content__title">{title}</h2>
       <div className="content__items">

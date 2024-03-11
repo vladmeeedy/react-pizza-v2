@@ -1,20 +1,40 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { CartItem, addItem, minusItem, removeItem } from '../redux/slices/cartSlice'
+import {
+  CartItem,
+  addItem,
+  minusItem,
+  removeItem,
+} from '../redux/slices/cartSlice'
+import clsx from 'clsx'
 
-type CartItemProps = { id: string, title: string, size: number, type: string, price: number, count: number, imageUrl: string}
+type CartItemProps = {
+  id: string
+  title: string
+  size: number
+  type: string
+  price: number
+  count: number
+  imageUrl: string
+}
 
-const CartItemBlock: React.FC<CartItemProps> = ({ id, title, size, type, price, count, imageUrl }) => {
+const CartItemBlock: React.FC<CartItemProps> = ({
+  id,
+  title,
+  size,
+  type,
+  price,
+  count,
+  imageUrl,
+}) => {
   const dispatch = useDispatch()
 
   const onClickPlus = () => {
-    dispatch(
-      addItem({ id, title, size, type, price, count, imageUrl }),
-    )
+    dispatch(addItem({ id } as CartItem))
   }
 
   const onClickMinus = () => {
-    dispatch(minusItem({ id} as CartItem))
+    dispatch(minusItem({ id } as CartItem))
   }
 
   const onClickRemove = () => {
@@ -30,13 +50,15 @@ const CartItemBlock: React.FC<CartItemProps> = ({ id, title, size, type, price, 
       </div>
       <div className="cart__item-info">
         <h3>{title}</h3>
-        <p>{type}, {size} см.</p>
+        <p>
+          {type}, {size} см.
+        </p>
       </div>
       <div className="cart__item-count">
-        <div
+        <button
+        disabled={count === 1}
           onClick={onClickMinus}
-          className="button button--outline button--circle cart__item-count-minus"
-        >
+          className="button button--outline button--circle cart__item-count-minus">
           <svg
             width="10"
             height="10"
@@ -53,7 +75,7 @@ const CartItemBlock: React.FC<CartItemProps> = ({ id, title, size, type, price, 
               fill="#EB5A1E"
             ></path>
           </svg>
-        </div>
+        </button>
         <b>{count}</b>
         <div
           onClick={onClickPlus}
