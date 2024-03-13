@@ -4,7 +4,7 @@ import styles from './Search.module.scss'
 import { FiSearch } from 'react-icons/fi'
 import { RxCross1 } from 'react-icons/rx'
 import { useDispatch } from 'react-redux'
-import { setSearchValue } from '../../redux/slices/filterSlice'
+import { setSearchValue } from '../../redux/filter/slice'
 
 const Search: React.FC = () => {
   const dispatch = useDispatch()
