@@ -51,7 +51,7 @@ const Home: React.FC = () => {
     window.scrollTo(0, 0)
   }
 
-  // React.useEffect(() => {
+  React.useEffect(() => {
   //   if (isMounted.current) {
   //     const params = {
   //       categoryId: categoryId > 0 ? categoryId : null,
@@ -65,7 +65,8 @@ const Home: React.FC = () => {
   //   if (window.location.search) {
   //     dispatch(fetchPizzas({} as SearchPizzaParams))
   //   }
-  // }, [categoryId, sort.sortProperty, searchValue, currentPage])
+  getPizzas()
+  }, [categoryId, sort.sortProperty, searchValue, currentPage])
 
   // React.useEffect(() => {
   //   if (window.location.search) {
@@ -114,16 +115,22 @@ const Home: React.FC = () => {
 
   return (
     <div className="container">
-      <div className="content__top">
-        <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-        <Sort value={sort} />
-      </div>
-      <h2 className="content__title">{title}</h2>
-      <div className="content__items">
-        {status === 'loading' ? skeletons : pizzas}
-      </div>
-      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
+    <div className="content__top">
+      <Categories value={categoryId} onChangeCategory={onChangeCategory} />
+      <Sort value={sort} />
     </div>
+    <h2 className="content__title">Всі піци</h2>
+    {status === 'error' ? (
+      <div className="content__error-info">
+        <h2>Виникла помилка 😕</h2>
+        <p>Нажаль, не вдалося отримати піци. Повторіть спробу пізніше.</p>
+      </div>
+    ) : (
+      <div className="content__items">{status === 'loading' ? skeletons : pizzas}</div>
+    )}
+
+    <Pagination currentPage={currentPage} onChangePage={onChangePage} />
+  </div>
   )
 }
 
