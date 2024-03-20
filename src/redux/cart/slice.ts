@@ -3,9 +3,6 @@ import getCartFromLS from '../../utils/getCartFromLS'
 import calcTotalPrise from '../../utils/calcTotalPrise'
 import { CartItem, CartSliceState } from './types'
 
-
-
-
 const initialState: CartSliceState = getCartFromLS()
 
 export const cartSlice = createSlice({

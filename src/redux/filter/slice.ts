@@ -1,8 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { FilterSliceState, Sort, SortPropertyEnum } from './types'
 
-
-
 const initialState: FilterSliceState = {
   searchValue: '',
   categoryId: 0,
@@ -45,7 +43,6 @@ export const filterSlice = createSlice({
     },
   },
 })
-
 
 export const {
   setCategoryId,

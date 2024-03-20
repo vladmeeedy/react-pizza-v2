@@ -4,9 +4,15 @@ import { Route, Routes } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import React from 'react'
 
-const Cart = React.lazy(() => import( /*webpackChunkName: "Cart"*/'./pages/Cart'))
-const FullPizza = React.lazy(() => import( /*webpackChunkName: "FullPizza"*/'./pages/FullPizza'))
-const NotFound = React.lazy(() => import( /*webpackChunkName: "NotFound"*/'./pages/NotFound'))
+const Cart = React.lazy(
+  () => import(/*webpackChunkName: "Cart"*/ './pages/Cart'),
+)
+const FullPizza = React.lazy(
+  () => import(/*webpackChunkName: "FullPizza"*/ './pages/FullPizza'),
+)
+const NotFound = React.lazy(
+  () => import(/*webpackChunkName: "NotFound"*/ './pages/NotFound'),
+)
 
 function App() {
   return (

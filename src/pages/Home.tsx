@@ -1,29 +1,19 @@
 import React from 'react'
-import Categories from '../components/Categories'
-import Sort from '../components/Sort'
-import PizzaBlock from '../components/PizzaBlock'
-import Skeleton from '../components/PizzaBlock/Skeleton'
-import Pagination from '../Pagination'
+import { Categories, PizzaBlock, Skeleton, Pagination } from '../components'
+import { Sort } from '../components'
 import { useSelector } from 'react-redux'
-import {
-  setCategoryId,
-  setCurrentPage,
-} from '../redux/filter/slice'
+import { setCategoryId, setCurrentPage } from '../redux/filter/slice'
 
 import { selectFilter } from '../redux/filter/selectors'
 import { selectPizzaData } from '../redux/pizza/selectors'
-import {
-  fetchPizzas,
-} from '../redux/pizza/asyncActions'
+import { fetchPizzas } from '../redux/pizza/asyncActions'
 import { useAppDispatch } from '../redux/store'
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch()
-  const isMounted = React.useRef(false)
   const { categoryId, sort, currentPage, searchValue } =
     useSelector(selectFilter)
   const { items, status } = useSelector(selectPizzaData)
-  const [title, setTitle] = React.useState('Всі піци')
 
   const onChangeCategory = React.useCallback((idx: number) => {
     dispatch(setCategoryId(idx))
@@ -52,53 +42,13 @@ const Home: React.FC = () => {
   }
 
   React.useEffect(() => {
-  //   if (isMounted.current) {
-  //     const params = {
-  //       categoryId: categoryId > 0 ? categoryId : null,
-  //       sortProperty: sort.sortProperty,
-  //       currentPage,
-  //     }
-  //     const queryString = qs.stringify(params, { skipNulls: true })
-  //     navigate(`/?${queryString}`)
-  //   }
-
-  //   if (window.location.search) {
-  //     dispatch(fetchPizzas({} as SearchPizzaParams))
-  //   }
-  getPizzas()
+    getPizzas()
   }, [categoryId, sort.sortProperty, searchValue, currentPage])
-
-  // React.useEffect(() => {
-  //   if (window.location.search) {
-  //     const params = qs.parse(
-  //       window.location.search.substring(1),
-  //     ) as unknown as SearchPizzaParams
-  //     const sort = sortList.find((obj) => obj.sortProperty === params.sortBy)
-
-  //     dispatch(
-  //       setFilters({
-  //         searchValue: params.search,
-  //         categoryId: Number(params.category),
-  //         currentPage: Number(params.currentPage),
-  //         sort: sort || sortList[0],
-  //       }),
-  //     )
-  //   }
-  //   isMounted.current = true
-  // }, [])
 
   React.useEffect(() => {
     window.scrollTo(0, 0)
     getPizzas()
   }, [categoryId, sort.sortProperty, currentPage])
-
-  // React.useEffect(() => {
-  //   if (status === 'error') {
-  //     setTitle('Виникла помилка')
-  //   } else {
-  //     setTitle('Всі піци')
-  //   }
-  // }, [status])
 
   const pizzas = items
     .filter((obj: any) => {
@@ -115,22 +65,24 @@ const Home: React.FC = () => {
 
   return (
     <div className="container">
-    <div className="content__top">
-      <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-      <Sort value={sort} />
-    </div>
-    <h2 className="content__title">Всі піци</h2>
-    {status === 'error' ? (
-      <div className="content__error-info">
-        <h2>Виникла помилка 😕</h2>
-        <p>Нажаль, не вдалося отримати піци. Повторіть спробу пізніше.</p>
+      <div className="content__top">
+        <Categories value={categoryId} onChangeCategory={onChangeCategory} />
+        <Sort value={sort} />
       </div>
-    ) : (
-      <div className="content__items">{status === 'loading' ? skeletons : pizzas}</div>
-    )}
+      <h2 className="content__title">Всі піци</h2>
+      {status === 'error' ? (
+        <div className="content__error-info">
+          <h2>Виникла помилка 😕</h2>
+          <p>Нажаль, не вдалося отримати піци. Повторіть спробу пізніше.</p>
+        </div>
+      ) : (
+        <div className="content__items">
+          {status === 'loading' ? skeletons : pizzas}
+        </div>
+      )}
 
-    <Pagination currentPage={currentPage} onChangePage={onChangePage} />
-  </div>
+      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
+    </div>
   )
 }
 
