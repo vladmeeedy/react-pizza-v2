@@ -2,7 +2,11 @@
 
 .header {
   border-bottom: 1px solid $gray-line;
-  padding: 40px 0;
+  padding: 40px 10px;
+  @media (max-width: 645px) {
+    padding: 10px 10px;
+  }
+
 
   .container {
     display: flex;
@@ -10,16 +14,23 @@
     justify-content: space-between;
 
     @media (max-width: 645px) {
-      flex-direction: column;
-
+      
       .header__cart {
-        margin-top: 20px;
+        margin-left: -100px;
+        
       }
     }
   }
 
   &__logo {
     display: flex;
+
+    @media (max-width: 645px) {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    
 
     img {
       margin-right: 15px;
@@ -31,10 +42,18 @@
       letter-spacing: 1%;
       text-transform: uppercase;
       font-weight: 800;
+
+      @media (max-width: 645px) {
+        font-size: 16px;
+      }
     }
 
     p {
       color: #7b7b7b;
+
+      @media (max-width: 645px) {
+        font-size: 12px;
+      }
     }
   }
 }

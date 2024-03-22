@@ -30,7 +30,7 @@ export const Header = () => {
             <img width="38" src={LogoSvg} alt="Pizza logo" />
             <div>
               <h1>React Pizza V2</h1>
-              <p>найсмачніша піца всесвіту</p>
+              <p>найсмачніша піца</p>
             </div>
           </div>
         </NavLink>
