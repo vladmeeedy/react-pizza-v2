@@ -30,8 +30,6 @@ body {
     width: 500px;
     text-align: center;
 
-    
-
     h2 {
       font-size: 32px;
       font-weight: 700;
@@ -47,19 +45,16 @@ body {
       width: 300px;
       text-align: center;
       height: 100vh;
-  
-      
-  
+
       h2 {
         font-size: 22px;
         font-weight: 700;
         margin-bottom: 5px;
       }
-  
+
       p {
         font-size: 14px;
       }
-
     }
   }
 
@@ -150,7 +145,7 @@ body {
 
     @media (max-width: 645px) {
       margin: 0px auto;
-    height: 100vh;
+      height: 100vh;
       padding: 0px 10px;
     }
     .content__title {
@@ -160,7 +155,6 @@ body {
 }
 
 .cart {
-  
   &__top {
     display: flex;
     justify-content: space-between;
@@ -451,7 +445,6 @@ body {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
     }
 
     .content__title {
