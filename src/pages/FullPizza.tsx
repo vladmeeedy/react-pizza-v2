@@ -30,7 +30,7 @@ const FullPizza = () => {
   }
   return (
     <div className="container">
-      <img src={pizza.imageUrl} alt="pizza" />
+      <img src={process.env.PUBLIC_URL + pizza.imageUrl} alt="pizza" />
       <h2>{pizza.title}</h2>
       <h4>{pizza.price}</h4>
       <Link to="/">
