@@ -2,7 +2,7 @@ import axios from 'axios'
 import React from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
-const FullPizza = () => {
+const FullPizza: React.FC = () => {
   const { id } = useParams()
   const [pizza, setPizza] = React.useState<{
     imageUrl: string
@@ -26,7 +26,7 @@ const FullPizza = () => {
   }, [])
 
   if (!pizza) {
-    return 'loading...'
+    return <div>Loading...</div>
   }
   return (
     <div className="container">
